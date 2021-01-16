@@ -102,7 +102,7 @@ export default Vue.extend({
     const roomId = this.$route.query.roomId
     const name = this.$route.query.name
 
-    this.socket = io("http://localhost:3030")
+    this.socket = io(process.env.beUrl)
     if(this.$route.query.playerLimit != null) {
       const playerLimit = this.$route.query.playerLimit
       this.socket.emit('join-game', {

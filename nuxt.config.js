@@ -48,6 +48,13 @@ export default {
     bootstrapCSS: false,
     bootstrapVueCSS: false,
   },
+
+  env: {
+    beUrl: process.env.NODE_ENV === 'production'
+      ? 'https://be.tgo.takashun.dev'
+      : 'http://localhost:3030'
+  },
+
   // Build Configuration (https://go.nuxtjs.dev/config-build)
   build: {
     vendor: [
