@@ -10,7 +10,7 @@
           <li class="list-group-item flex-fill"><h1><b-button @click="turnEnd" variant="success">ターンエンド</b-button></h1></li>
         </ul>
         <ul class="list-group list-group-horizontal-md my-3">
-          <li v-for="(player, index) in this.roomObject.players" class="list-group-item flex-fill" v-bind:class="{active: index === playerIndex}">{{ player.name }}</li>
+          <li v-for="(player, index) in this.roomObject.players" class="list-group-item flex-fill" v-bind:class="{'list-group-item-primary': index === roomObject.gameTurnIndex}"><h4 class="mb-0">{{ player.name }} <b-badge variant="info">{{ player.hands.length }}</b-badge></h4></li>
         </ul>
         <div class="d-flex flex-wrap flex-row my-3 card-place">
           <div>100</div>
@@ -101,6 +101,8 @@ export default Vue.extend({
 
     const roomId = this.$route.query.roomId
     const name = this.$route.query.name
+
+    console.log(this.roomObject.gameTurnIndex)
 
     this.socket = io(process.env.beUrl)
     if(this.$route.query.playerLimit != null) {
