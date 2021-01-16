@@ -220,6 +220,12 @@ export default Vue.extend({
         title: '失敗',
         centered: true
       })
+        .then(value => {
+        window.location.href = '/'
+      })
+        .catch(err => {
+          // An error occurred
+        })
     },
     gamePreEndModal() {
       this.$bvModal.msgBoxOk(`完全クリアを目指してみましょう。`, {
