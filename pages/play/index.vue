@@ -102,8 +102,6 @@ export default Vue.extend({
     const roomId = this.$route.query.roomId
     const name = this.$route.query.name
 
-    console.log(this.roomObject.gameTurnIndex)
-
     this.socket = io(process.env.beUrl)
     if(this.$route.query.playerLimit != null) {
       const playerLimit = this.$route.query.playerLimit
@@ -136,7 +134,6 @@ export default Vue.extend({
       this.roomObject = Object.assign({}, roomValue.roomObject)
 
       if(this.roomObject.gameState !== this.state.end && this.roomObject.gameTurnIndex === this.playerIndex && this.roomObject.players[this.playerIndex].hands.length === 0) {
-        console.log("dsfdsdsa")
         this.$bvToast.toast(`ターンエンドしてください。`, {
           title: 'プレイできるカードがありません！',
           variant: 'warning',
@@ -205,7 +202,6 @@ export default Vue.extend({
           this.leadButtons.asc02 = this.isPlay(this.roomObject.players[this.playerIndex].hands[cardNumber], this.roomObject.leads.asc02.slice(-1)[0], false)
         } else {
           this.activeHandCard = -1
-
           this.leadButtons.desc01 = false
           this.leadButtons.desc02 = false
           this.leadButtons.asc01 = false
@@ -272,6 +268,11 @@ export default Vue.extend({
     turnEnd() {
       const playCount = this.roomObject.minPlays - this.roomObject.players[this.playerIndex].plays
       this.activeHandCard = -1
+      this.leadButtons.desc01 = false
+      this.leadButtons.desc02 = false
+      this.leadButtons.asc01 = false
+      this.leadButtons.asc02 = false
+
       if(playCount <= 0 || this.roomObject.players[this.playerIndex].hands.length === 0) {
         this.$bvToast.toast(`ターンエンド`, {
           title: 'ターンエンドしました。',
