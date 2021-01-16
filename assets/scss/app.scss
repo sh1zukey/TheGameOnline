@@ -1,0 +1,13 @@
+$tg-color: #380000;
+
+.bg-tg {
+  background-color: $tg-color;
+}
+
+$theme-colors: (
+  "tg": $tg-color
+);
+
+@import '~jpn.css/src/bootstrap/jpn.scss';
+@import "~bootstrap/scss/bootstrap";
+@import '~bootstrap-vue/src/index.scss';
