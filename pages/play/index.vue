@@ -269,6 +269,7 @@ export default Vue.extend({
     },
     turnEnd() {
       const playCount = this.roomObject.minPlays - this.roomObject.players[this.playerIndex].plays
+      this.activeHandCard = -1
       if(playCount <= 0 || this.roomObject.players[this.playerIndex].hands.length === 0) {
         this.$bvToast.toast(`ターンエンド`, {
           title: 'ターンエンドしました。',
