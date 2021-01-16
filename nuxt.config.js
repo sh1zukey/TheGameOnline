@@ -51,7 +51,7 @@ export default {
 
   env: {
     beUrl: process.env.NODE_ENV === 'production'
-      ? 'https://be.tgo.takashun.dev'
+      ? 'http://be.tgo.takashun.dev'
       : 'http://localhost:3030'
   },
 
