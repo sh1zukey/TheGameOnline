@@ -16,28 +16,28 @@
           <div>100</div>
           <div v-for="item in roomObject.leads.desc01">{{ item }}</div>
           <div class="align-self-center">
-            <b-button @click="clickPlayCard('desc01')" v-bind:disabled="!leadButtons.desc01" block variant="tg">ここに置く</b-button>
+            <b-button @click="clickPlayCard('desc01')" v-bind:disabled="!leadButtons.desc01" block variant="tg">①ここに置く</b-button>
           </div>
         </div>
         <div class="d-flex flex-wrap flex-row my-3 card-place">
           <div>100</div>
           <div v-for="item in roomObject.leads.desc02">{{ item }}</div>
           <div class="align-self-center">
-            <b-button @click="clickPlayCard('desc02')" v-bind:disabled="!leadButtons.desc02" block variant="tg">ここに置く</b-button>
+            <b-button @click="clickPlayCard('desc02')" v-bind:disabled="!leadButtons.desc02" block variant="tg">②ここに置く</b-button>
           </div>
         </div>
         <div class="d-flex flex-wrap flex-row my-3 card-place">
           <div>1</div>
           <div v-for="item in roomObject.leads.asc01">{{ item }}</div>
           <div class="align-self-center">
-            <b-button @click="clickPlayCard('asc01')" v-bind:disabled="!leadButtons.asc01" block variant="tg">ここに置く</b-button>
+            <b-button @click="clickPlayCard('asc01')" v-bind:disabled="!leadButtons.asc01" block variant="tg">③ここに置く</b-button>
           </div>
         </div>
         <div class="d-flex flex-wrap flex-row my-3 card-place">
           <div>1</div>
           <div v-for="item in roomObject.leads.asc02">{{ item }}</div>
           <div class="align-self-center">
-            <b-button @click="clickPlayCard('asc02')" v-bind:disabled="!leadButtons.asc02" block variant="tg">ここに置く</b-button>
+            <b-button @click="clickPlayCard('asc02')" v-bind:disabled="!leadButtons.asc02" block variant="tg">④ここに置く</b-button>
           </div>
         </div>
       </div>
@@ -105,6 +105,9 @@ export default Vue.extend({
     this.socket = io(process.env.beUrl)
     if(this.$route.query.playerLimit != null) {
       const playerLimit = this.$route.query.playerLimit
+
+      console.log({playerLimit: playerLimit, name: name, roomId: roomId})
+
       this.socket.emit('join-game', {
         playerLimit: playerLimit,
         name: name,
@@ -118,10 +121,12 @@ export default Vue.extend({
     }
 
     this.socket.on("game-ready", (roomValue) => {
+      console.log({func_name: "game-ready", roomObject: JSON.parse(JSON.stringify(this.roomObject))})
       this.roomObject = Object.assign({}, roomValue.roomObject)
     })
 
     this.socket.on("game-start", (roomValue) => {
+      console.log({func_name: "game-start", roomObject: JSON.parse(JSON.stringify(this.roomObject))})
       this.roomObject = Object.assign({}, roomValue.roomObject)
       this.playerIndex = this.roomObject.players.findIndex((v) => v.id === this.socket.id)
 
@@ -131,6 +136,7 @@ export default Vue.extend({
     })
 
     this.socket.on("game-update", (roomValue) => {
+      console.log({func_name: "game-update", roomObject: JSON.parse(JSON.stringify(this.roomObject))})
       this.roomObject = Object.assign({}, roomValue.roomObject)
 
       if(this.roomObject.gameState !== this.state.end && this.roomObject.gameTurnIndex === this.playerIndex && this.roomObject.players[this.playerIndex].hands.length === 0) {
@@ -147,10 +153,12 @@ export default Vue.extend({
     })
 
     this.socket.on("game-error", (errorValue) => {
+      console.log({func_name: "game-error", msg: JSON.parse(JSON.stringify(errorValue.msg))})
       this.gameForcedEnd(errorValue.msg)
     })
 
     this.socket.on("game-end", (endValue) => {
+      console.log({func_name: "game-end", func: JSON.parse(JSON.stringify(endValue.func))})
       const func = endValue.func
 
       if(func === "badEnd") {
@@ -295,6 +303,7 @@ export default Vue.extend({
       }
     },
     progressGame(func) {
+      console.log({func_name: func, roomObject: JSON.parse(JSON.stringify(this.roomObject))})
       this.socket.emit("game-progress", {
         roomObject: this.roomObject,
         func: func
