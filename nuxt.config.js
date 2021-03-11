@@ -52,7 +52,10 @@ export default {
   env: {
     beUrl: process.env.NODE_ENV === 'production'
       ? 'http://be.tgo.asuka.icu'
-      : 'http://localhost:3030'
+      : 'http://localhost:3030',
+    bewsUrl: process.env.NODE_ENV === 'production'
+      ? 'ws://bews.tgo.asuka.icu'
+      : 'ws://localhost:3031'
   },
 
   // Build Configuration (https://go.nuxtjs.dev/config-build)
