@@ -103,7 +103,7 @@ export default Vue.extend({
     const name = this.$route.query.name
     this.uuid = this.generateUuid()
 
-    this.ws = new WebSocket(process.env.bewsUrl);
+    this.ws = new WebSocket(process.env.bewsUrl)
     const instance = this
     this.ws.onopen = function (event) {
       // 部屋を作るor参加
@@ -131,7 +131,9 @@ export default Vue.extend({
           return false
         }
 
-        if(json.func === "game-ready") {
+        if(json.func === "game-heartbeat") {
+          instance.sendData(instance.ws, "game-heartbeat", {kind: "pong"})
+        } else if(json.func === "game-ready") {
           console.dir({func_name: "game-ready", roomObject: JSON.parse(JSON.stringify(instance.roomObject))})
           instance.roomObject = Object.assign({}, json.roomObject)
         } else if(json.func === "game-start") {
