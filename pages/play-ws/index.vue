@@ -126,6 +126,7 @@ export default Vue.extend({
 
       instance.ws.addEventListener("message", (value) => {
         const json = JSON.parse(value.data)
+        console.dir({type: "サーバー→クライアント", jsonData: json})
 
         if(json.func === null) {
           return false
@@ -134,10 +135,10 @@ export default Vue.extend({
         if(json.func === "game-heartbeat") {
           instance.sendData(instance.ws, "game-heartbeat", {kind: "pong"})
         } else if(json.func === "game-ready") {
-          console.dir({func_name: "game-ready", roomObject: JSON.parse(JSON.stringify(instance.roomObject))})
+          //console.dir({func_name: "game-ready", roomObject: JSON.parse(JSON.stringify(instance.roomObject))})
           instance.roomObject = Object.assign({}, json.roomObject)
         } else if(json.func === "game-start") {
-          console.dir({func_name: "game-start", roomObject: JSON.parse(JSON.stringify(instance.roomObject))})
+          //console.dir({func_name: "game-start", roomObject: JSON.parse(JSON.stringify(instance.roomObject))})
           instance.roomObject = Object.assign({}, json.roomObject)
           instance.playerIndex = instance.roomObject.players.findIndex((v) => v.id === instance.uuid)
 
@@ -145,7 +146,7 @@ export default Vue.extend({
             instance.yourTurn()
           }
         } else if(json.func === "game-update") {
-          console.dir({func_name: "game-update", roomObject: JSON.parse(JSON.stringify(instance.roomObject))})
+          //console.dir({func_name: "game-update", roomObject: JSON.parse(JSON.stringify(instance.roomObject))})
           instance.roomObject = Object.assign({}, json.roomObject)
 
           if(instance.roomObject.gameState !== instance.state.end && instance.roomObject.gameTurnIndex === instance.playerIndex && instance.roomObject.players[instance.playerIndex].hands.length === 0) {
@@ -160,10 +161,10 @@ export default Vue.extend({
             instance.yourTurn()
           }
         } else if(json.func === "game-error") {
-          console.dir({func_name: "game-error", roomObject: JSON.parse(JSON.stringify(json))})
+          //console.dir({func_name: "game-error", roomObject: JSON.parse(JSON.stringify(json))})
           instance.gameForcedEnd(json.msg)
         } else if(json.func === "game-end") {
-          console.dir({func_name: "game-end", roomObject: JSON.parse(JSON.stringify(json))})
+          //console.dir({func_name: "game-end", roomObject: JSON.parse(JSON.stringify(json))})
           const endType = json.endType
 
           if(endType === "badEnd") {
@@ -311,7 +312,7 @@ export default Vue.extend({
       }
     },
     progressGame(progType) {
-      console.dir({func_name: "game-progress", roomObject: JSON.parse(JSON.stringify(this.roomObject))})
+      //console.dir({func_name: "game-progress", roomObject: JSON.parse(JSON.stringify(this.roomObject))})
       this.sendData(this.ws, "game-progress", {
         roomObject: this.roomObject,
         progType: progType
@@ -359,6 +360,7 @@ export default Vue.extend({
     sendData(ws, func, data) {
       let sendObject = {}
       Object.assign(sendObject, {func: func}, data)
+      console.dir({type: "クライアント→サーバー", jsonData: sendObject})
       ws.send(JSON.stringify(sendObject))
     },
     generateUuid() {
