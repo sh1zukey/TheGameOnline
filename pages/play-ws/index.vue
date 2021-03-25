@@ -253,6 +253,7 @@ export default Vue.extend({
     gamePreExitEndModal() {
       this.$bvModal.msgBoxOk(`次は完全クリアを目指してみましょう。`, {
         title: 'ゲームクリア！',
+        okVariant: 'success',
         centered: true
       })
         .then(value => {
